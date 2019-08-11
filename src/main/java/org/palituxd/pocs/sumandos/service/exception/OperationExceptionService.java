@@ -1,6 +1,6 @@
 package org.palituxd.pocs.sumandos.service.exception;
 
-import org.palituxd.pocs.sumandos.properties.CustomMessage;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
 import org.palituxd.pocs.sumandos.properties.MessageConfigProperties;
 import org.palituxd.pocs.sumandos.service.OperationType;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,8 +1,8 @@
 package org.palituxd.pocs.sumandos.controller;
 
-import org.palituxd.pocs.sumandos.exception.CustomException;
-import org.palituxd.pocs.sumandos.properties.CustomMessage;
-import org.palituxd.pocs.sumandos.response.CustomResponse;
+import org.palituxd.pocs.sumandos.base.exception.CustomException;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
+import org.palituxd.pocs.sumandos.base.response.CustomResponse;
 import org.palituxd.pocs.sumandos.service.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

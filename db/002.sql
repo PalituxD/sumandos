@@ -1,0 +1,3 @@
+USE testdb;
+INSERT INTO operation VALUES (NULL, 'ADDITION', 1,2,3);
+INSERT INTO operation VALUES (NULL, 'ADDITION', 2,2,4);

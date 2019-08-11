@@ -1,8 +1,8 @@
-package org.palituxd.pocs.sumandos.response;
+package org.palituxd.pocs.sumandos.base.response;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.palituxd.pocs.sumandos.properties.CustomMessage;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
 
 @Getter
 @Setter

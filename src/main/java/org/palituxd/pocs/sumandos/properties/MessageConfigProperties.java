@@ -2,6 +2,7 @@ package org.palituxd.pocs.sumandos.properties;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;

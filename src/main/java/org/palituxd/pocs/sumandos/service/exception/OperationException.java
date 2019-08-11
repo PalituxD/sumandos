@@ -2,8 +2,8 @@ package org.palituxd.pocs.sumandos.service.exception;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.palituxd.pocs.sumandos.exception.CustomException;
-import org.palituxd.pocs.sumandos.properties.CustomMessage;
+import org.palituxd.pocs.sumandos.base.exception.CustomException;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
 
 @Getter
 public class OperationException extends CustomException {

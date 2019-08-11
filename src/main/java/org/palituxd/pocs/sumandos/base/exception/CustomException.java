@@ -1,7 +1,7 @@
-package org.palituxd.pocs.sumandos.exception;
+package org.palituxd.pocs.sumandos.base.exception;
 
 import lombok.AllArgsConstructor;
-import org.palituxd.pocs.sumandos.properties.CustomMessage;
+import org.palituxd.pocs.sumandos.base.CustomMessage;
 
 @AllArgsConstructor
 public abstract class CustomException extends RuntimeException implements Explainable {

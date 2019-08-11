@@ -1,4 +1,4 @@
-package org.palituxd.pocs.sumandos.exception;
+package org.palituxd.pocs.sumandos.base.exception;
 
 public interface Explainable {
 

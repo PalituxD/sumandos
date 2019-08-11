@@ -1,4 +1,4 @@
-package org.palituxd.pocs.sumandos.properties;
+package org.palituxd.pocs.sumandos.base;
 
 import lombok.Getter;
 import lombok.Setter;
