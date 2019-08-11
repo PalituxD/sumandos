@@ -19,7 +19,7 @@ public class CalculatorController {
     @Autowired
     private Operation operation;
 
-    @RequestMapping(value = "${REQUEST.addition}/{num1}/{num2}",
+    @RequestMapping(value = "${url.addition}/{num1}/{num2}",
             produces = MediaType.APPLICATION_JSON_VALUE,
             method = RequestMethod.GET)
     public CustomResponse<BigDecimal> add(@PathVariable String num1, @PathVariable String num2) {

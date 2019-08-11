@@ -25,7 +25,7 @@ public class SumandosApplicationTests {
     @Autowired
     private MockMvc mvc;
 
-    @Value("${REQUEST.addition}")
+    @Value("${url.addition}")
     private String ADDITION_URL;
 
     @Value("${messages.bad-number-format.code}")
