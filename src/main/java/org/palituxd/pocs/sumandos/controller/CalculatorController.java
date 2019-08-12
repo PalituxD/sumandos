@@ -1,7 +1,9 @@
 package org.palituxd.pocs.sumandos.controller;
 
-import org.palituxd.pocs.sumandos.base.exception.CustomException;
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.palituxd.pocs.sumandos.base.CustomMessage;
+import org.palituxd.pocs.sumandos.base.exception.CustomException;
 import org.palituxd.pocs.sumandos.base.response.CustomResponse;
 import org.palituxd.pocs.sumandos.service.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,13 +18,20 @@ import java.math.BigDecimal;
 @RestController
 public class CalculatorController {
 
+    private Counter counter;
+
     @Autowired
     private Operation operation;
 
+    public CalculatorController(@Autowired MeterRegistry registry) {
+        this.counter = Counter.builder("service.invocations").description("Total service invocations").register(registry);
+    }
+
     @RequestMapping(value = "${url.addition}/{num1}/{num2}",
             produces = MediaType.APPLICATION_JSON_VALUE,
-            method = RequestMethod.GET)
+            method = RequestMethod.PUT)
     public CustomResponse<BigDecimal> add(@PathVariable String num1, @PathVariable String num2) {
+        counter.increment();
         CustomResponse<BigDecimal> customResponse = new CustomResponse<>();
         try {
             customResponse.setResult(operation.sum(num1, num2));

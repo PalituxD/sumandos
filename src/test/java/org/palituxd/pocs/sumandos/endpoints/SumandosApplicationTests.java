@@ -69,7 +69,7 @@ public class SumandosApplicationTests {
 
     private void whenPerformAdditionOperation() throws Exception {
         final String url = ADDITION_URL + "/" + number1 + "/" + number2;
-        resultActions = mvc.perform(MockMvcRequestBuilders.get(url).contentType(MediaType.APPLICATION_JSON))
+        resultActions = mvc.perform(MockMvcRequestBuilders.put(url).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 

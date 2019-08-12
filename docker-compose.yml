@@ -1,14 +1,42 @@
 version: '3.3'
 services:
-  docker-mariadb:
-    image: mariadb
-    container_name: mariadb_crud
+  database:
+    image: mysql
     ports:
-    - "3306:3306"
+    - "${ENV_DATABASE_PORTS}"
     volumes:
     - ./db/:/docker-entrypoint-initdb.d
     environment:
-    - MYSQL_ROOT_PASSWORD=root
-    - MYSQL_DATABASE=testdb
-    - MYSQL_USER=user
-    - MYSQL_PASSWORD=password
+    - MYSQL_ROOT_PASSWORD=${ENV_DATABASE_ROOT_PASSWORD}
+    - MYSQL_DATABASE=${ENV_DATABASE_DATABASE}
+    - MYSQL_USER=${ENV_DATABASE_APPLICATION_USER}
+    - MYSQL_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+  calculator:
+    build: .
+    ports:
+    - "${ENV_APPLICATION_PORTS}"
+    environment:
+    - SERVER_PORT=${ENV_APPLICATION_PORT}
+    - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
+    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
+    - MY_DATABASE_PORT=${ENV_DATABASE_PORT}
+    - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
+    - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+    depends_on:
+    - ${ENV_DATABASE_SERVER}
+  prometheus:
+    image: prom/prometheus
+    ports:
+    - "${ENV_COLLECTOR_PORTS}"
+    volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    depends_on:
+    - ${ENV_APPLICATION_SERVER}
+  grafana:
+    image: grafana/grafana
+    ports:
+    - ${ENV_MONITOR_PORTS}
+    volumes:
+    - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasources.yml
+    depends_on:
+    - ${ENV_COLLECTOR_SERVER}
