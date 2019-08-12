@@ -32,4 +32,6 @@ echo "End... Run other tools"
 sleep 1
 echo "Enjoy the application"
 
-# -DMY_DATABASE_SERVER=localhost -DMY_DATABASE_DATABASE=testdb -DMY_DATABASE_PORT=3306 -DMY_DATABASE_USER=user -DMY_DATABASE_PASSWORD=password
+echo "To test the app: exec 'curl -X PUT http://localhost:${ENV_APPLICATION_PORT}/sum/10/20'"
+echo "To open prometheus: http://localhost:${ENV_COLLECTOR_PORT}"
+echo "To open grafana: http://localhost:${ENV_MONITOR_PORT}"
