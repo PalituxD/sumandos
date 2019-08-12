@@ -26,7 +26,7 @@ echo "End... Run the application"
 
 echo "Starting... Run other tools"
 docker-compose up -d
-sleep 10
+sleep 15
 echo "End... Run other tools"
 
 sleep 1
