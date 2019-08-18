@@ -5,7 +5,7 @@ source env.sh
 sh ./shutdown.sh
 
 echo "Starting... Build Application Jar"
-mvn clean install
+mvn clean install -f $PWD/app/pom.xml
 sleep 1
 echo "End... Build Application Jar"
 
@@ -19,10 +19,15 @@ docker-compose up -d ${ENV_DATABASE_SERVER}
 sleep 10
 echo "End... Run the database"
 
-echo "Starting... Run the application"
+echo "Starting... first node"
 docker-compose up -d ${ENV_APPLICATION_SERVER}
 sleep 20
-echo "End... Run the application"
+echo "End... first node has been deployed"
+
+echo "Starting... second node"
+docker-compose up -d ${ENV_APPLICATION_SERVER_2}
+sleep 20
+echo "End... second node has been deployed"
 
 echo "Starting... Run other tools"
 docker-compose up -d

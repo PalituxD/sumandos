@@ -11,10 +11,30 @@ services:
     - MYSQL_DATABASE=${ENV_DATABASE_DATABASE}
     - MYSQL_USER=${ENV_DATABASE_APPLICATION_USER}
     - MYSQL_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+  web:
+    image: nginx
+    ports:
+    - "8080:80"
+    build:
+      context: $PWD/nginx
+    command: [nginx-debug, '-g', 'daemon off;']
+    links:
+    - calculator
+    - calculator2
+    depends_on:
+    - calculator
+    - calculator2
   calculator:
-    build: .
+    build:
+      context: $PWD/app
+      args:
+      - server_port=${ENV_APPLICATION_PORT}
+      - server=${ENV_APPLICATION_SERVER}
     ports:
     - "${ENV_APPLICATION_PORTS}"
+    deploy:
+      mode: replicated
+      replicas: 2
     environment:
     - SERVER_PORT=${ENV_APPLICATION_PORT}
     - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
@@ -24,6 +44,24 @@ services:
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
     depends_on:
     - ${ENV_DATABASE_SERVER}
+  calculator2:
+    build:
+      context: $PWD/app
+      args:
+      - server_port=${ENV_APPLICATION_PORT_2}
+      - server=${ENV_APPLICATION_SERVER_2}
+    ports:
+    - "${ENV_APPLICATION_PORTS_2}"
+    environment:
+    - SERVER_PORT=${ENV_APPLICATION_PORT_2}
+    - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
+    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
+    - MY_DATABASE_PORT=${ENV_DATABASE_PORT}
+    - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
+    - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+    depends_on:
+    - ${ENV_DATABASE_SERVER}
+
   prometheus:
     image: prom/prometheus
     ports:
@@ -32,6 +70,7 @@ services:
     - ./prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
     - ${ENV_APPLICATION_SERVER}
+    - ${ENV_APPLICATION_SERVER_2}
   grafana:
     image: grafana/grafana
     ports:
