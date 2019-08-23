@@ -1,18 +1,32 @@
 version: '3.3'
 services:
   database:
-    image: mysql
+    build:
+      context: $PWD/mysql
+#    image: mysql
+    restart: always
     ports:
     - "${ENV_DATABASE_PORTS}"
     volumes:
-    - ./db/:/docker-entrypoint-initdb.d
+    - ./mysql/scripts/:/docker-entrypoint-initdb.d
     environment:
     - MYSQL_ROOT_PASSWORD=${ENV_DATABASE_ROOT_PASSWORD}
     - MYSQL_DATABASE=${ENV_DATABASE_DATABASE}
     - MYSQL_USER=${ENV_DATABASE_APPLICATION_USER}
     - MYSQL_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+  database-exporter:
+    build:
+      context: $PWD/mysql-exporter
+    restart: always
+    ports:
+    - "9104:9104"
+    environment:
+    - DATA_SOURCE_NAME=exporter:password@(database:3306)/performance_schema
+    depends_on:
+    - database
   web:
     image: nginx
+    restart: always
     ports:
     - "8080:80"
     build:
@@ -30,11 +44,9 @@ services:
       args:
       - server_port=${ENV_APPLICATION_PORT}
       - server=${ENV_APPLICATION_SERVER}
+    restart: always
     ports:
     - "${ENV_APPLICATION_PORTS}"
-    deploy:
-      mode: replicated
-      replicas: 2
     environment:
     - SERVER_PORT=${ENV_APPLICATION_PORT}
     - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
@@ -50,6 +62,7 @@ services:
       args:
       - server_port=${ENV_APPLICATION_PORT_2}
       - server=${ENV_APPLICATION_SERVER_2}
+    restart: always
     ports:
     - "${ENV_APPLICATION_PORTS_2}"
     environment:
@@ -61,21 +74,22 @@ services:
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
     depends_on:
     - ${ENV_DATABASE_SERVER}
-
   prometheus:
     image: prom/prometheus
+    restart: always
     ports:
     - "${ENV_COLLECTOR_PORTS}"
     volumes:
-    - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    - ./resources/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
     - ${ENV_APPLICATION_SERVER}
     - ${ENV_APPLICATION_SERVER_2}
   grafana:
     image: grafana/grafana
+    restart: always
     ports:
     - ${ENV_MONITOR_PORTS}
     volumes:
-    - ./grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasources.yml
+    - ./resources/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasources.yml
     depends_on:
     - ${ENV_COLLECTOR_SERVER}

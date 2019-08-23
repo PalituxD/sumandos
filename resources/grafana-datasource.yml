@@ -1,8 +1,9 @@
+#https://grafana.com/docs/administration/provisioning/
 datasources:
 - name: Prometheus
   type: prometheus
-  access: direct
-  url: http://${ENV_COLLECTOR_SERVER}:${ENV_COLLECTOR_PORT}
+  access: proxy
+  url: http://prometheus:9090
   basic_auth: false
   with_credentials: false
   is_default: true

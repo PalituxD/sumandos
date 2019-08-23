@@ -1,0 +1,15 @@
+scrape_configs:
+- job_name: 'spring-actuator'
+  metrics_path: '/actuator/prometheus'
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['calculator:8091','calculator2:8092']
+  tls_config:
+    insecure_skip_verify: true
+- job_name: 'database-actuator'
+  metrics_path: '/metrics'
+  scrape_interval: 5s
+  static_configs:
+  - targets: ['database-exporter:9104']
+  tls_config:
+    insecure_skip_verify: true

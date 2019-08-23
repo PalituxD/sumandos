@@ -1,5 +1,8 @@
+create database if not exists testdb;
+
 USE testdb;
-create table operation (
+
+create table testdb.operation (
     id integer auto_increment,
     op varchar(10) not null,
     number1 numeric not null,
