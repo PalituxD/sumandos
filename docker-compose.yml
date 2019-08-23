@@ -3,10 +3,9 @@ services:
   database:
     build:
       context: $PWD/mysql
-#    image: mysql
     restart: always
     ports:
-    - "${ENV_DATABASE_PORTS}"
+    - "3306:3306"
     volumes:
     - ./mysql/scripts/:/docker-entrypoint-initdb.d
     environment:
@@ -41,55 +40,60 @@ services:
   calculator:
     build:
       context: $PWD/app
-      args:
-      - server_port=${ENV_APPLICATION_PORT}
-      - server=${ENV_APPLICATION_SERVER}
     restart: always
     ports:
-    - "${ENV_APPLICATION_PORTS}"
+    - "8091:8091"
     environment:
-    - SERVER_PORT=${ENV_APPLICATION_PORT}
-    - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
-    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
+    - SERVER_PORT=8091
+    - MY_DATABASE_SERVER=database
     - MY_DATABASE_PORT=${ENV_DATABASE_PORT}
+    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
     - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
     depends_on:
-    - ${ENV_DATABASE_SERVER}
+    - database
+    healthcheck:
+      test: curl -f http://calculator:8091/actuator/health || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
   calculator2:
     build:
       context: $PWD/app
-      args:
-      - server_port=${ENV_APPLICATION_PORT_2}
-      - server=${ENV_APPLICATION_SERVER_2}
     restart: always
     ports:
-    - "${ENV_APPLICATION_PORTS_2}"
+    - "8092:8092"
     environment:
-    - SERVER_PORT=${ENV_APPLICATION_PORT_2}
-    - MY_DATABASE_SERVER=${ENV_DATABASE_SERVER}
-    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
+    - SERVER_PORT=8092
+    - MY_DATABASE_SERVER=database
     - MY_DATABASE_PORT=${ENV_DATABASE_PORT}
+    - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
     - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
     depends_on:
-    - ${ENV_DATABASE_SERVER}
+    - database
+    healthcheck:
+      test: curl -f http://calculator2:8092/actuator/health || exit 1
+      interval: 1m
+      timeout: 2s
+      retries: 5
   prometheus:
     image: prom/prometheus
     restart: always
     ports:
-    - "${ENV_COLLECTOR_PORTS}"
+    - "9090:9090"
     volumes:
     - ./resources/prometheus.yml:/etc/prometheus/prometheus.yml
     depends_on:
-    - ${ENV_APPLICATION_SERVER}
-    - ${ENV_APPLICATION_SERVER_2}
+    - calculator
+    - calculator2
+    - database-exporter
   grafana:
     image: grafana/grafana
     restart: always
     ports:
-    - ${ENV_MONITOR_PORTS}
+    - "3000:3000"
     volumes:
     - ./resources/grafana-datasource.yml:/etc/grafana/provisioning/datasources/grafana-datasources.yml
     depends_on:
-    - ${ENV_COLLECTOR_SERVER}
+    - prometheus
