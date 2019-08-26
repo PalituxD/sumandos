@@ -6,6 +6,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.palituxd.pocs.sumandos.dao.repository.OperationRepository;
+import org.palituxd.pocs.sumandos.dao.repository.cache.OperationRepositoryCache;
 import org.palituxd.pocs.sumandos.service.Operation;
 import org.palituxd.pocs.sumandos.services.conf.SumandosServicesConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,9 @@ public class SumandosServicesTests {
 
     @MockBean
     public OperationRepository operationRepository;
+
+    @MockBean
+    public OperationRepositoryCache operationRepositoryCache;
 
     @Before
     public void setUp() {

@@ -45,6 +45,7 @@ public class CalculatorController {
             cm.setMessage(e.getMessage());
             cm.setCode("NN");
             customResponse.setReason(cm);
+            e.printStackTrace();
         }
         return customResponse;
     }

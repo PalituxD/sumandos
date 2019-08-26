@@ -3,6 +3,8 @@ package org.palituxd.pocs.sumandos.endpoints;
 import org.hamcrest.CoreMatchers;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.palituxd.pocs.sumandos.SumandosApplication;
+import org.palituxd.pocs.sumandos.endpoints.conf.TestRedisConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -15,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = {SumandosApplication.class, TestRedisConfiguration.class})
 @AutoConfigureMockMvc
 public class SumandosApplicationTests {
 

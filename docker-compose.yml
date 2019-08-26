@@ -37,6 +37,15 @@ services:
     depends_on:
     - calculator
     - calculator2
+  memory-database:
+    build:
+      context: $PWD/memory-database
+    restart: always
+    ports:
+    - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+    - ./memory-database/redis-data:/data
   calculator:
     build:
       context: $PWD/app
@@ -50,6 +59,9 @@ services:
     - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
     - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+    - MY_MEMORY_DATABASE_SERVER=memory-database
+    - MY_MEMORY_DATABASE_PORT=6379
+    - MY_MEMORY_DATABASE_PASSWORD=
     depends_on:
     - database
     healthcheck:
@@ -70,6 +82,9 @@ services:
     - MY_DATABASE_DATABASE=${ENV_DATABASE_DATABASE}
     - MY_DATABASE_USER=${ENV_DATABASE_APPLICATION_USER}
     - MY_DATABASE_PASSWORD=${ENV_DATABASE_APPLICATION_PASSWORD}
+    - MY_MEMORY_DATABASE_SERVER=memory-database
+    - MY_MEMORY_DATABASE_PORT=6379
+    - MY_MEMORY_DATABASE_PASSWORD=
     depends_on:
     - database
     healthcheck:
