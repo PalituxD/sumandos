@@ -2,3 +2,8 @@ pocs.iml
 target/
 .idea/
 .idea/csv.xml
+./app/.idea/
+./app/.settings/
+./app/.classpath
+./app/.factorypath
+./app/.project
